@@ -114,15 +114,16 @@ export const useSocketStore = create<useSocketStoreType>((set, get) => ({
                     onlineUser.lastActive = new Date().toISOString()
                 }
             })
+            useContactStore.getState().setContacts(newContacts)
 
 
-
-            console.log('partner online', props);
+            console.log('partner', props);
 
             const selected: Selection = useUserProfileStore.getState().selected
             if (!selected || selected == 'profile') return
             const setSelected = useUserProfileStore.getState().setSelected
             if (selected.email === props.partnerEmail) {
+                // console.log('Seeing partner');                
                 setSelected({ ...selected, online: props.isOnline, lastActive: new Date().toISOString() })
             }
         })
@@ -193,13 +194,19 @@ export const useSocketStore = create<useSocketStoreType>((set, get) => ({
             return;
         }
 
+        // console.log(user);        
+
         const toNotify: string[] = [];
 
         contacts.forEach((contact) => {
             const partnerUser = contact.users[0].email === user.email ?
                 contact.users[1] : contact.users[0];
             toNotify.push(partnerUser.email);
+            // console.log(partnerUser.email,contact.users[0].email, user.email)
         });
+        // console.log(contacts);
+        
+
 
         if (toNotify.length === 0) return;
 

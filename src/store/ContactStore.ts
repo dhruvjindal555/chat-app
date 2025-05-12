@@ -58,7 +58,7 @@ export const useContactStore = create<ContactStoreType>((set, get) => ({
 
             // const data = JSON.parse(raw);
             const data = await res.json();
-            console.log('parsed object:', data);
+            console.log('parsed chats:', data);
 
 
             if (!res.ok) throw new Error(data.message)

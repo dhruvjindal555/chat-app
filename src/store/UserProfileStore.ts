@@ -105,20 +105,10 @@ export const useUserProfileStore = create<UserProfileStore>((set, get) => ({
 
             if (!res.ok) throw new Error(data.message)
             console.log(data);
+            console.log('Last Active: ',new Date(data.user.lastActive).toLocaleString());
+            
 
-
-
-            const lastActiveResponse = await fetch(`/api/online`, {
-                method: "POST",
-                body: JSON.stringify({
-                    email: auth.currentUser.email
-                })
-            })
-            const lastActiveData = await lastActiveResponse.json()
-            if (!lastActiveResponse.ok) throw new Error(lastActiveData.message)
-            console.log(lastActiveData);
-
-            set({ user: data })
+            set({ user: data.user })
             set({ imageUrl: data.user.profileUrl });
 
             return data.user;

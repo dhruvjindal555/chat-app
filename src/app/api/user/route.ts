@@ -1,5 +1,6 @@
 import dbConnect from "@/lib/dbConnect"
 import User from "@/models/UserSchema"
+import { now } from "mongoose"
 import { NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -16,8 +17,8 @@ export async function GET(req: NextRequest) {
             })
         }
         await dbConnect()
-        const user = await User.findOne({ email })
-        console.log(email);        
+        const user = await User.findOneAndUpdate({ email }, { lastActive: Date.now().toString() })
+        console.log(email);
 
         if (!user) {
             return new Response(JSON.stringify({
