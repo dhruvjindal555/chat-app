@@ -42,6 +42,7 @@ type useMessageStoreType = {
   userReadAllMessages: (partnerEmail: string) => void
 
   partnerReadAllMessages: (partnerEmail: string) => void
+  partnerOnline: () => void
 }
 
 export const useMessageStore = create<useMessageStoreType>((set, get) => ({
@@ -267,5 +268,25 @@ export const useMessageStore = create<useMessageStoreType>((set, get) => ({
       console.error(errMessage);
       toast.error(errMessage)
     }
+  },
+
+  partnerOnline: () => {
+    const user = auth.currentUser
+    if (!user) return
+    const currentChat = get().completeChatDetails
+    if (!currentChat) return
+
+    set({
+      completeChatDetails: {
+        ...currentChat,
+        messages: currentChat.messages.map((message) => {
+          if (message.sender == user.uid && message.status =='Sent') {
+            message.status = 'Delivered'
+          }
+          return message
+        })
+      }
+    })
   }
+
 }))

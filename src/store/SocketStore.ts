@@ -102,20 +102,21 @@ export const useSocketStore = create<useSocketStoreType>((set, get) => ({
 
         socket.on('partner-online-status', (props) => {
 
-            const currentContacts = useContactStore.getState()
-            if (!currentContacts.contacts) return
+            // const currentContacts = useContactStore.getState()
+            // if (!currentContacts.contacts) return
 
-            const newContacts = [...currentContacts.contacts]
-            newContacts.forEach((e) => {
-                const onlineUser = e.users[0].email === auth.currentUser?.email ? e.users[1] : e.users[0];
+            // const newContacts = [...currentContacts.contacts]
+            // newContacts.forEach((e) => {
+            //     const onlineUser = e.users[0].email === auth.currentUser?.email ? e.users[1] : e.users[0];
 
-                if (onlineUser.email == props.partnerEmail) {
-                    onlineUser.online = props.isOnline
-                    onlineUser.lastActive = new Date().toISOString()
-                }
-            })
-            useContactStore.getState().setContacts(newContacts)
+            //     if (onlineUser.email == props.partnerEmail) {
+            //         onlineUser.online = props.isOnline
+            //         onlineUser.lastActive = new Date().toISOString()
+            //     }
+            // })
+            // useContactStore.getState().setContacts(newContacts)
 
+            useContactStore.getState().partnerOnline(props.partnerEmail, props.isOnline)
 
             console.log('partner', props);
 
@@ -123,7 +124,8 @@ export const useSocketStore = create<useSocketStoreType>((set, get) => ({
             if (!selected || selected == 'profile') return
             const setSelected = useUserProfileStore.getState().setSelected
             if (selected.email === props.partnerEmail) {
-                // console.log('Seeing partner');                
+                // console.log('Seeing partner');           
+                useMessageStore.getState().partnerOnline()
                 setSelected({ ...selected, online: props.isOnline, lastActive: new Date().toISOString() })
             }
         })
@@ -205,7 +207,7 @@ export const useSocketStore = create<useSocketStoreType>((set, get) => ({
             // console.log(partnerUser.email,contact.users[0].email, user.email)
         });
         // console.log(contacts);
-        
+
 
 
         if (toNotify.length === 0) return;

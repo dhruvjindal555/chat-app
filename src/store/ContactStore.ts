@@ -139,18 +139,15 @@ export const useContactStore = create<ContactStoreType>((set, get) => ({
         set((state) => {
             const updated = state.contacts?.map(contact => {
                 console.log('partner is online');
-                const partner = contact.users.find(user => user.email === partnerEmail);
-                if (partner) {
-                    return {
-                        ...contact,
-                        online: isOnline
-                        // lastMessage: {
-                        //     ...contact.lastMessage,
-                        //     status: 'Delivered'
-                        // }
-                    };
-                }
-                return contact;
+                const lastMessage = { ...contact.lastMessage }
+                const users = contact.users.map(user => {
+                    if (user.email === partnerEmail) {
+                        user.online = isOnline
+                        if (isOnline) lastMessage.status = 'Delivered'
+                    }
+                    return user
+                });
+                return { ...contact, users, lastMessage };
             })
 
             return updated ? { contacts: [...updated] } : {}

@@ -91,7 +91,7 @@ export default function ChatUI() {
 
   useEffect(() => {
     const handleUnload = () => {
-      console.log('Reload');      
+      // console.log('Reload');      
       useSocketStore.getState().disconnectSocket();
     };
     window.addEventListener("beforeunload", handleUnload);
@@ -101,7 +101,7 @@ export default function ChatUI() {
 
   useEffect(() => {
     const handleVisibilityChange = async () => {
-      console.log('Visibility change');      
+      // console.log('Visibility change');      
       if (document.visibilityState === "hidden") {
         useSocketStore.getState().notifyOnlineStatus(false);
       } else {
